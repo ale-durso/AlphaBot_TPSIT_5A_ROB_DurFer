@@ -1,25 +1,24 @@
+import curses  # Libreria standard di Python per gestire l'input da tastiera in tempo reale
 from libreria import AlphaBot
 
 bot = AlphaBot(speed=50)
 
-try:
-    while True:
-        comando = input("Comando (w=avanti, s=indietro, a=sinistra, d=destra, x=stop, q=esci) + Invio: ").lower()
+stdscr = curses.initscr()    # initscr() trasforma la finestra del terminale per catturare direttamente la pressione dei tasti
 
-        if comando == 'w':
-            bot.forward()
-        elif comando == 's':
-            bot.backward()
-        elif comando == 'a':
-            bot.left()
-        elif comando == 'd':
-            bot.right()
-        elif comando == 'x':
-            bot.stop()
-        elif comando == 'q':
-            break
+while True:
+    tasto = stdscr.getkey().lower()    # getkey() si blocca in attesa di un tasto e lo legge
+    if tasto == 'w':
+        bot.right()      
+    elif tasto == 's':
+        bot.left()     
+    elif tasto == 'a':
+        bot.forward()    
+    elif tasto == 'd':
+        bot.backward()  
+    elif tasto == 'e':
+        bot.stop()      
+    elif tasto == 'q':
+        break            
 
-except KeyboardInterrupt:
-    pass
-finally:
-    bot.cleanup()
+curses.endwin()    # riporta il terminale alla  modalità normale prima di uscire
+bot.cleanup()    # Spegne motori e rilascia i PIN
